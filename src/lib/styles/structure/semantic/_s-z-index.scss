@@ -1,0 +1,11 @@
+@use '../primitive/_p-z-index' as prim_z;
+
+$SEMANTIC_Z_INDEX:(
+  hell: prim_z.get-primitive-z(25),
+lowest: prim_z.get-primitive-z(50),
+lower:prim_z.get-primitive-z(75),
+base:prim_z.get-primitive-z(100),
+higher:prim_z.get-primitive-z(200),
+highest:prim_z.get-primitive-z(300),
+heaven:prim_z.get-primitive-z(1000),
+);

@@ -1,0 +1,40 @@
+// ==========================================================================
+// PUBLIC Z-INDEX UTILITIES
+// Provides a public-facing API for applying z-index values.
+// ==========================================================================
+
+@use '../structure/semantic/_s-z-index' as s_z_index;
+@use 'sass:map';
+
+// --- Helper Function ---
+// Provides a function to directly get a semantic z-index value.
+
+@function get-z-index($name) {
+  @if not map.has-key(s_z_index.$SEMANTIC_Z_INDEX, $name) {
+    @error "Z-index name '#{$name}' not found in $SEMANTIC_Z_INDEX map. Available names: #{map.keys(s_z_index.$SEMANTIC_Z_INDEX)}.";
+  }
+
+  @return map.get(s_z_index.$SEMANTIC_Z_INDEX, $name);
+}
+
+// --- Apply Z-Index Mixin ---
+// Applies a semantic z-index value using a parameter.
+// @param {String} $name - The semantic name of the z-index level (e.g., 'base', 'heaven').
+//                         Must be a key in the $SEMANTIC_Z_INDEX map.
+// @example
+//   .my-element {
+//     @include apply-z(higher);
+//   }
+
+@mixin apply-z($name) {
+  z-index: get-z-index($name);
+}
+
+/*
+// Example of how to create utility classes if still desired, alongside the mixin:
+@each $name, $value in s_z_index.$SEMANTIC_Z_INDEX {
+  .u-z-#{$name} {
+    z-index: $value;
+  }
+}
+*/
