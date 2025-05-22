@@ -55,7 +55,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
 
 		// Preview Server (for production builds)
 		preview: {
-			port: 4173,
+			port: 3000,
 			strictPort: true
 		},
 
