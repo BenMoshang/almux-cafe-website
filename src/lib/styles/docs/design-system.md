@@ -12,34 +12,33 @@ This document outlines the structure, conventions, and usage of the SCSS-based t
 ## 2. Directory Structure
 
 The design system's core SCSS files are organized as follows (assuming a base path like `your-project/src/scss/` or `token-design-system/`):
-
 ```
 
 .
-├── global/                        \# Global configurations and utilities
-│   ├── \_g-variables.scss          \# Global Sass variables (e.g., viewport widths, type scale ratios, base font size for clamp)
-│   │
-│   ├── structure/                 \# Core structural definitions (Potentially move to a top-level `core/` or `tokens/` directory)
-│   │   ├── primitive/             \# Raw, unopinionated design tokens and systems
-│   │   │   ├── \_p-spacing-scale.scss \# Generates base spacing values (min/max) for different scale steps
-│   │   │   └── \_p-typography-scale.scss  \# Primitive typography (base font sizes for min/max, families, etc.)
-│   │   │   └── ...                \# Other primitive systems (colors, etc.)
-│   │   └── semantic/              \# Meaningful aliases and responsive calculations for primitive tokens
-│   │       ├── \_s-spacing-scale.scss \# Defines semantic responsive spacing variables using get-clamp()
-│   │       └── \_s-typography-scale.scss    \# Defines semantic responsive typography styles using get-clamp()
-│   │       └── ...                \# Other semantic layers
-│   │
-│   ├── public/                    \# Public-facing API (mixins and functions)
-│   │   ├── \_public-spacing.scss   \# Mixins for applying responsive spacing (apply-padding, apply-margin)
-│   │   ├── \_public-typography.scss \# Mixins/functions for applying responsive typography styles (apply-text-style)
-│   │   ├── \_public-grid.scss      \# Mixins and utility classes for the 12-column responsive grid system
-│   │   └── ...                \# Other public APIs
-│   │
-│   └── utils/                     \# Utility functions and mixins
-│       ├── \_u-clamp.scss          \# Utility function `get-clamp()` for generating CSS clamp() strings
-│       ├── \_u-mixtend.scss        \# Utility for placeholder selectors and common mixins for layout, responsive, etc.
+├── global/ \# Global configurations and utilities
+│ ├── \_g-variables.scss \# Global Sass variables (e.g., viewport widths, type scale ratios, base font size for clamp)
+│ │
+│ ├── structure/ \# Core structural definitions (Potentially move to a top-level `core/` or `tokens/` directory)
+│ │ ├── primitive/ \# Raw, unopinionated design tokens and systems
+│ │ │ ├── \_p-spacing-scale.scss \# Generates base spacing values (min/max) for different scale steps
+│ │ │ └── \_p-typography-scale.scss \# Primitive typography (base font sizes for min/max, families, etc.)
+│ │ │ └── ... \# Other primitive systems (colors, etc.)
+│ │ └── semantic/ \# Meaningful aliases and responsive calculations for primitive tokens
+│ │ ├── \_s-spacing-scale.scss \# Defines semantic responsive spacing variables using get-clamp()
+│ │ └── \_s-typography-scale.scss \# Defines semantic responsive typography styles using get-clamp()
+│ │ └── ... \# Other semantic layers
+│ │
+│ ├── public/ \# Public-facing API (mixins and functions)
+│ │ ├── \_public-spacing.scss \# Mixins for applying responsive spacing (apply-padding, apply-margin)
+│ │ ├── \_public-typography.scss \# Mixins/functions for applying responsive typography styles (apply-text-style)
+│ │ ├── \_public-grid.scss \# Mixins and utility classes for the 12-column responsive grid system
+│ │ └── ... \# Other public APIs
+│ │
+│ └── utils/ \# Utility functions and mixins
+│ ├── \_u-clamp.scss \# Utility function `get-clamp()` for generating CSS clamp() strings
+│ ├── \_u-mixtend.scss \# Utility for placeholder selectors and common mixins for layout, responsive, etc.
 │
-└── main.scss                      \# Main SCSS file that imports and orchestrates the system
+└── main.scss \# Main SCSS file that imports and orchestrates the system
 
 ````
 
@@ -53,13 +52,7 @@ The design system's core SCSS files are organized as follows (assuming a base pa
     * `_s-`: Semantic layer (e.g., `_s-spacing-scale.scss`).
     * `_public-`: Public API layer (e.g., `_public-spacing.scss`, `_public-grid.scss`).
     * `_u-`: Utility files (e.g., `_u-clamp.scss`).
-* **Maps:**
-    * !!! NO STRING VALUES ALLOWED IN MAPS !!! (This seems like a specific project rule, keeping it).
-    * Semantic mapping variables like `$_SEMANTIC_SPACING_MAPPINGS` and responsive value maps like `$RESPONSIVE_SPACING_VALUES` are uppercase with underscores.
-* **Variables:**
-    * Global configuration maps are often uppercase with underscores (e.g., `$_TYPE_SCALE_RATIOS`, `$PAGE_MIN_INLINE`).
-    * Private variables within a module (not intended for direct external use) can be prefixed with an underscore (e.g., `$_SPACING_CONFIG_DEFAULT`).
-    * Publicly exported semantic variables (like those in `$RESPONSIVE_SPACING_VALUES`) use kebab-case keys (e.g., `'spacing-xs'`, `'gutter-m'`). Helper functions like `get-responsive-spacing()` are used to access them.
+* **Maps:**    * !!! NO STRING VALUES ALLOWED IN MAPS !!! (This seems like a specific project rule, keeping it).    * Semantic mapping variables like `$_SEMANTIC_SPACING_MAPPINGS` and responsive value maps like `$RESPONSIVE_SPACING_VALUES` are uppercase with underscores.* **Variables:**    * Global configuration maps are often uppercase with underscores (e.g., `$_TYPE_SCALE_RATIOS`, `$PAGE_MIN_INLINE`).    * Private variables within a module (not intended for direct external use) can be prefixed with an underscore (e.g., `$_SPACING_CONFIG_DEFAULT`).    * Publicly exported semantic variables (like those in `$RESPONSIVE_SPACING_VALUES`) use kebab-case unquoted keys (e.g., `spacing-xs`, `gutter-m`). Helper functions like `get-responsive-spacing()` are used to access them.
 * **Mixins & Functions:**
     * Public API mixins/functions: `apply-<property>` (e.g., `apply-padding`, `apply-text-style`), or descriptive names like `grid-container`, `col`.
     * Utility functions/mixins:
@@ -91,7 +84,7 @@ The system follows a one-way data flow: `Global -> Primitive -> Semantic -> Publ
     * Provides meaningful aliases for primitive tokens and orchestrates the generation of responsive CSS `clamp()` values.
     * **`_s-spacing-scale.scss`**:
         * Imports primitive spacing values from `_p-spacing-scale.scss`, the `get-clamp` utility from `_u-clamp.scss`, and global viewport variables from `_g-variables.scss`.
-        * Defines `$_SEMANTIC_SPACING_MAPPINGS`: A map associating semantic names (e.g., 'spacing-xs', 'gutter-m') with keys from the primitive spacing scale for both mobile (min) and desktop (max) values.
+        * Defines `$_SEMANTIC_SPACING_MAPPINGS`: A map associating semantic names (e.g., `spacing-xs`, `gutter-m`) with keys from the primitive spacing scale for both mobile (min) and desktop (max) values.
         * Defines `$_CLAMP_MIN_VIEWPORT` and `$_CLAMP_MAX_VIEWPORT` using global variables (e.g., `g-vars.$PAGE_MIN_INLINE`, `g-vars.$PAGE_MAX_INLINE`).
         * Generates `$RESPONSIVE_SPACING_VALUES`: A map where keys are semantic names and values are CSS `clamp()` strings. These are calculated using the `get-clamp` function with min/max values derived from the primitive scale (via mappings) and the configured viewport widths.
         * Includes a helper function `get-responsive-spacing($semantic-name)` to retrieve specific `clamp()` values from `$RESPONSIVE_SPACING_VALUES`.
@@ -104,7 +97,7 @@ The system follows a one-way data flow: `Global -> Primitive -> Semantic -> Publ
     * Exposes user-friendly mixins and functions for applying styles in components. This is the primary interface for developers using the design system, now providing responsive styles by default.
     * **`_public-spacing.scss`**:
         * Provides mixins like `apply-padding($semantic-name, $side: null)` and `apply-margin($semantic-name, $side: null)`.
-        * These mixins accept a semantic name (e.g., `'spacing-xs'`, `'gutter-m'`) and an optional side.
+        * These mixins accept a semantic name (e.g., `spacing-xs`, `gutter-m`) and an optional side.
         * They use `get-responsive-spacing()` from `_s-spacing-scale.scss` to fetch the corresponding `clamp()` CSS value and apply it using logical properties.
     * **`_public-typography.scss`**:
         * Provides an `apply-text-style($style-key)` mixin.
@@ -231,29 +224,33 @@ The grid system can be configured at the beginning of `_public-grid.scss`:
 @use 'path/to/public/public-grid' as grid; // Or via a main ds import
 
 .custom-feature {
-  @include grid.grid-container($gutter-key: 'gutter-s'); // Use small gutters
+	@include grid.grid-container($gutter-key: 'gutter-s'); // Use small gutters
 
-  .feature__sidebar {
-    @include grid.col($span: 12); // Mobile: full width
-    @include grid.col($span: 4, $order: -1, $breakpoint-key: 'md'); // Medium+: 4 cols, appears first
-  }
+	.feature__sidebar {
+		@include grid.col($span: 12); // Mobile: full width
+		@include grid.col(
+			$span: 4,
+			$order: -1,
+			$breakpoint-key: 'md'
+		); // Medium+: 4 cols, appears first
+	}
 
-  .feature__main-content {
-    @include grid.col($span: 12); // Mobile: full width
-    @include grid.col($span: 8, $breakpoint-key: 'md'); // Medium+: 8 cols
-  }
+	.feature__main-content {
+		@include grid.col($span: 12); // Mobile: full width
+		@include grid.col($span: 8, $breakpoint-key: 'md'); // Medium+: 8 cols
+	}
 }
 ```
 
 ## 6\. Key SCSS Features Used
 
-  * **Modules (`@use ... as ...`):** For namespacing and clear dependency management.
-  * **Maps (`map.get`, `map.has-key`, `map.merge`):** Extensively used for managing configurations, semantic mappings, and sets of generated responsive values.
-  * **Mixins (`@mixin`) and Functions (`@function`):** For creating reusable logic, APIs, and generating dynamic CSS values like `clamp()`.
-  * **Meta Functions (`meta.variable-exists`, `meta.module-variable`):** For introspection.
-  * **Logical Properties:** Preferred for better internationalization and layout flexibility.
-  * **CSS `clamp()`:** The cornerstone of the responsive sizing strategy, generated via the `get-clamp` utility.
-  * **CSS Grid:** Used for the layout grid system.
+- **Modules (`@use ... as ...`):** For namespacing and clear dependency management.
+- **Maps (`map.get`, `map.has-key`, `map.merge`):** Extensively used for managing configurations, semantic mappings, and sets of generated responsive values.
+- **Mixins (`@mixin`) and Functions (`@function`):** For creating reusable logic, APIs, and generating dynamic CSS values like `clamp()`.
+- **Meta Functions (`meta.variable-exists`, `meta.module-variable`):** For introspection.
+- **Logical Properties:** Preferred for better internationalization and layout flexibility.
+- **CSS `clamp()`:** The cornerstone of the responsive sizing strategy, generated via the `get-clamp` utility.
+- **CSS Grid:** Used for the layout grid system.
 
 ## 7\. How to Use (Example: Spacing & Typography)
 
@@ -273,37 +270,35 @@ The grid system can be configured at the beginning of `_public-grid.scss`:
     // @use 'path/to/global/public/public-spacing' as spacing;
     // @use 'path/to/global/public/public-typography' as typography;
     .my-card {
-      // Apply 'spacing-md' padding on all sides. This will be a responsive clamp() value.
-      @include ds.spacing.apply-padding('spacing-md'); //
-      .my-card__title {
-        // Apply 'heading-3' text style. Font size will be a responsive clamp() value.
-        @include ds.typography.apply-text-style('heading-3'); //
-        // Apply 'spacing-sm' margin to the bottom.
-        @include ds.spacing.apply-margin('spacing-sm', bottom); //
-      }
-      .my-card__content {
-        // Apply 'gutter-lg' padding to the block (top and bottom).
-        @include ds.spacing.apply-padding('gutter-lg', block); //
-        @include ds.typography.apply-text-style('body-text'); //
-      }
+    	// Apply spacing-md padding on all sides. This will be a responsive clamp() value.        @include ds.spacing.apply-padding(spacing-md); //
+    	.my-card__title {
+    		// Apply 'heading-3' text style. Font size will be a responsive clamp() value.
+    		@include ds.typography.apply-text-style('heading-3'); //
+    		// Apply spacing-sm margin to the bottom.        @include ds.spacing.apply-margin(spacing-sm, bottom); //
+    	}
+    	.my-card__content {
+    		// Apply gutter-lg padding to the block (top and bottom).        @include ds.spacing.apply-padding(gutter-lg, block); //
+    		@include ds.typography.apply-text-style('body-text'); //
+    	}
     }
     ```
-    **Note:** The actual semantic keys like `'spacing-md'`, `'gutter-lg'`, `'heading-3'`, `'body-text'` are defined in your semantic scale maps (`$_SEMANTIC_SPACING_MAPPINGS`, etc.).
+    **Note:** The actual semantic keys like `spacing-md`, `gutter-lg`, `heading-3`, `body-text` are defined in your semantic scale maps (`$_SEMANTIC_SPACING_MAPPINGS`, etc.). Note that these are unquoted identifiers, not strings.
 
 ## 8\. Benefits of this Approach
 
-  * **Responsive by Default:** Spacing, typography, and grid layouts adapt fluidly to viewport changes.
-  * **Clarity:** Clear separation of concerns between raw values, semantic meanings, responsive calculations, and application logic.
-  * **Maintainability:** Changes to base values, viewport settings, or scaling logic in primitive/global layers propagate system-wide.
-  * **Consistency:** Ensures consistent application of design tokens and responsive behavior.
-  * **Scalability:** Easy to add new tokens, semantic meanings, or public APIs.
-  * **Developer Experience:** Provides an intuitive API. Developers request semantic styles, and responsiveness is handled automatically.
+- **Responsive by Default:** Spacing, typography, and grid layouts adapt fluidly to viewport changes.
+- **Clarity:** Clear separation of concerns between raw values, semantic meanings, responsive calculations, and application logic.
+- **Maintainability:** Changes to base values, viewport settings, or scaling logic in primitive/global layers propagate system-wide.
+- **Consistency:** Ensures consistent application of design tokens and responsive behavior.
+- **Scalability:** Easy to add new tokens, semantic meanings, or public APIs.
+- **Developer Experience:** Provides an intuitive API. Developers request semantic styles, and responsiveness is handled automatically.
 
 ## 9\. Architectural Considerations
 
-  * **Unified Token Directory:** Consider unifying the top-level directories for tokens (currently `structure/` for spacing and assumed typography, potentially other token types like colors reside elsewhere or would also go here) into a single, shared directory like `core/` or `tokens/`. This improves architectural consistency as the system grows. (Reflects outstanding recommendation from Memory c8718608)
+- **Unified Token Directory:** Consider unifying the top-level directories for tokens (currently `structure/` for spacing and assumed typography, potentially other token types like colors reside elsewhere or would also go here) into a single, shared directory like `core/` or `tokens/`. This improves architectural consistency as the system grows. (Reflects outstanding recommendation from Memory c8718608)
 
 This documentation should serve as a guide for understanding, using, and extending the SCSS design system.
 
 ```
+
 ```

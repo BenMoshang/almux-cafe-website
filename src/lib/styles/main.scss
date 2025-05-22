@@ -3,4 +3,8 @@
 @use 'sass:string';
 @use 'sass:math';
 
-// Public API - Forward all public utilities@forward 'public';
+// Import custom fonts
+@use 'global/fonts';
+
+// Public API - Forward all public utilities
+@forward 'public';

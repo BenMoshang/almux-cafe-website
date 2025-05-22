@@ -1,0 +1,51 @@
+/* Import font declarations */
+@import './lib/styles/global/_fonts.scss';
+
+/* Basic CSS reset and typography setup */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 16px; /* Base font size for rem calculations */
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Nunito Sans', Arial, Helvetica, sans-serif;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #333;
+	background-color: #fff;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure proper font loading and fallback */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: 'Bowlby One', 'Helvetica Neue', Arial, sans-serif;
+	font-weight: 400; /* Bowlby One only has regular weight */
+	line-height: 1.2;
+	margin: 0 0 1rem 0;
+}
+
+/* Optimize font rendering */
+.font-display {
+	font-family: 'Bowlby One', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.font-heading {
+	font-family: 'Bowlby One', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.font-body {
+	font-family: 'Nunito Sans', Arial, Helvetica, sans-serif;
+}

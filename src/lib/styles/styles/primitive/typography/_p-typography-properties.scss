@@ -20,62 +20,74 @@
  * Defines ideal character counts per line for readability.
  */
 $PARAGRAPH_WIDTHS: (
-  tighter: 50ch,
-  normal: 65ch,
-  wider: 75ch,
+	tighter: 50ch,
+	normal: 65ch,
+	wider: 75ch
 ) !default;
 
 /**
  * Font Families
+ * Updated to use custom fonts: Bowlby One for display/headings, Nunito Sans for body text
  */
 $FONT_FAMILIES: (
-  display: 'Helvetica Neue',
-  Arial,
-  sans-serif,
-  // Example
-  heading: 'Georgia',
-  Times,
-  serif,
-  // Example
-  body: 'Arial',
-  Helvetica,
-  sans-serif,
-  // Example
-  mono: 'Courier New',
-  monospace,
-  // Example
+	display: (
+		'Bowlby One',
+		'Helvetica Neue',
+		Arial,
+		sans-serif
+	),
+	heading: (
+		'Bowlby One',
+		'Helvetica Neue',
+		Arial,
+		sans-serif
+	),
+	body: (
+		'Nunito Sans',
+		Arial,
+		Helvetica,
+		sans-serif
+	),
+	mono: (
+		'Courier New',
+		monospace
+	)
 ) !default;
 
 /**
  * Font Weights
+ * Updated to include variable font weights for Nunito Sans
  */
 $FONT_WEIGHTS: (
-  thin: 100,
-  extra-light: 200,
-  light: 300,
-  regular: 400,
-  medium: 500,
-  semi-bold: 600,
-  bold: 700,
-  extra-bold: 800,
-  black: 900,
-  VARIABLE: (
-    // For variable fonts
-    regular: 450,
-    semi-bold: 650,
-    bold: 750,
-  ),
+	thin: 100,
+	extra-light: 200,
+	light: 300,
+	regular: 400,
+	medium: 500,
+	semi-bold: 600,
+	bold: 700,
+	extra-bold: 800,
+	black: 900,
+	VARIABLE: (
+		// For variable fonts like Nunito Sans
+		light: 300,
+		regular: 400,
+		middle: 500,
+		semi-bold: 600,
+		bold: 700,
+		extra-bold: 800
+	)
 ) !default;
 
 /**
  * Letter Spacing
  */
 $LETTER_SPACINGS: (
-  tightest: -0.05em,
-  tighter: -0.025em,
-  normal: 0em,
-  wider: 0.025em,
-  widest: 0.05em,
+	tightest: -0.05em,
+	tighter: -0.025em,
+	normal: 0em,
+	wider: 0.025em,
+	widest: 0.05em
 ) !default;
 
 /* ==========================================================================
@@ -88,11 +100,11 @@ $LETTER_SPACINGS: (
  * @return {String | Null}
  */
 @function get-font-family($key: body) {
-  @if not map.has-key($FONT_FAMILIES, $key) {
-    @warn "Font family key '#{$key}' not found.";
-    @return null;
-  }
-  @return map.get($FONT_FAMILIES, $key);
+	@if not map.has-key($FONT_FAMILIES, $key) {
+		@warn "Font family key '#{$key}' not found.";
+		@return null;
+	}
+	@return map.get($FONT_FAMILIES, $key);
 }
 
 /**
@@ -101,11 +113,11 @@ $LETTER_SPACINGS: (
  * @return {Number | Null}
  */
 @function get-font-weight($key: regular) {
-  @if not map.has-key($FONT_WEIGHTS, $key) {
-    @warn "Font weight key '#{$key}' not found.";
-    @return null;
-  }
-  @return map.get($FONT_WEIGHTS, $key);
+	@if not map.has-key($FONT_WEIGHTS, $key) {
+		@warn "Font weight key '#{$key}' not found.";
+		@return null;
+	}
+	@return map.get($FONT_WEIGHTS, $key);
 }
 
 /**
@@ -114,9 +126,9 @@ $LETTER_SPACINGS: (
  * @return {Length | Null}
  */
 @function get-letter-spacing($key: normal) {
-  @if not map.has-key($LETTER_SPACINGS, $key) {
-    @warn "Letter spacing key '#{$key}' not found.";
-    @return null;
-  }
-  @return map.get($LETTER_SPACINGS, $key);
+	@if not map.has-key($LETTER_SPACINGS, $key) {
+		@warn "Letter spacing key '#{$key}' not found.";
+		@return null;
+	}
+	@return map.get($LETTER_SPACINGS, $key);
 }
