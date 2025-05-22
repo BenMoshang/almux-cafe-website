@@ -3,5 +3,5 @@
 @use 'sass:string';
 @use 'sass:math';
 
-// Public utilities
-@use 'public/public-z-index';
+// Public API - Forward all public utilities
+@forward 'public' as *;
