@@ -26,17 +26,8 @@ const config = {
 		dev: process.env.NODE_ENV === 'development',
 		// CSS handling
 		css: 'injected',
-		// Accessibility warnings
-		a11y: {
-			// Enable accessibility checks
-			emptyBlock: 'warn',
-			missingLabel: 'warn',
-			clickEventsHaveKeyEvents: 'warn',
-			autofocus: 'warn'
-		},
 		// Better performance
-		hydratable: true,
-		legacy: false
+		hydratable: true
 	},
 
 	// SvelteKit configuration
@@ -58,11 +49,7 @@ const config = {
 		// Alias configuration (should match vite.config.ts)
 		alias: {
 			$lib: 'src/lib',
-			$components: 'src/lib/components',
-			$stores: 'src/lib/stores',
-			$utils: 'src/lib/utils',
-			$styles: 'src/lib/styles',
-			$types: 'src/lib/types'
+			$styles: 'src/lib/styles'
 		},
 
 		// Files configuration
@@ -120,16 +107,8 @@ const config = {
 					paths: {
 						$lib: ['src/lib'],
 						'$lib/*': ['src/lib/*'],
-						$components: ['src/lib/components'],
-						'$components/*': ['src/lib/components/*'],
-						$stores: ['src/lib/stores'],
-						'$stores/*': ['src/lib/stores/*'],
-						$utils: ['src/lib/utils'],
-						'$utils/*': ['src/lib/utils/*'],
 						$styles: ['src/lib/styles'],
-						'$styles/*': ['src/lib/styles/*'],
-						$types: ['src/lib/types'],
-						'$types/*': ['src/lib/types/*']
+						'$styles/*': ['src/lib/styles/*']
 					}
 				};
 				return config;

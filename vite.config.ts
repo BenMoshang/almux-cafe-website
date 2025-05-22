@@ -13,15 +13,11 @@ export default defineConfig(({ command, mode }): UserConfig => {
 		resolve: {
 			alias: {
 				$lib: resolve('./src/lib'),
-				$components: resolve('./src/lib/components'),
-				$stores: resolve('./src/lib/stores'),
-				$utils: resolve('./src/lib/utils'),
-				$styles: resolve('./src/lib/styles'),
-				$types: resolve('./src/lib/types')
+				$styles: resolve('./src/lib/styles')
 			}
 		},
 
-		// CSS Configuration		css: {			transformer: 'lightningcss',			lightningcss: {				// Minimize in production				minify: isProd			},			// Better dev experience			devSourcemap: isDev		},
+		// CSS Configuration		css: {			transformer: 'lightningcss',			// Better dev experience			devSourcemap: isDev		},
 
 		// Build Configuration
 		build: {
@@ -33,8 +29,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
 				output: {
 					// Optimize chunk splitting
 					manualChunks: {
-						vendor: ['svelte/internal', '@sveltejs/kit'],
-						utils: ['$lib/utils']
+						vendor: ['svelte/internal', '@sveltejs/kit']
 					}
 				}
 			},
