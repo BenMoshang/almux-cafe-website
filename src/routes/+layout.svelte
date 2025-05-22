@@ -59,16 +59,18 @@
 	.page-container {
 		flex-grow: 1;
 
-		margin-inline: auto;
 		margin: 0 auto;
 
 		@include apply-z(base);
-
-		inline-size: 100%;
-		min-block-size: 100%;
-		& > * {
-			flex: 1;
-		}
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	inline-size: 100%;
+	min-block-size: 100%;
+	& > * {
+		flex: 1;
+	}
 	}
 
 	:global(html) {

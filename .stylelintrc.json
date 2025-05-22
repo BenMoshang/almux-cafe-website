@@ -1,3 +1,66 @@
 {
-  "extends": "stylelint-config-standard-scss"
+  "extends": [
+    "stylelint-config-standard-scss",
+    "stylelint-config-recess-order"
+  ],
+  "plugins": [
+    "stylelint-use-logical-spec"
+  ],
+  "rules": {
+    "scss/dollar-variable-pattern": [
+      "^(?:_[A-Z0-9]+(?:_[A-Z0-9]+)*|[a-z0-9]+(?:-[a-z0-9]+)*|[A-Z0-9]+(?:_[A-Z0-9]+)*)$",
+      {
+        "message": "Variables must be _UPPER_SNAKE_CASE (e.g., $_CONFIG_VAR), kebab-case (e.g., $my-variable), or UPPER_SNAKE_CASE (e.g., $MAX_WIDTH)."
+      }
+    ],
+    "scss/at-function-pattern": [
+      "^[a-z]+(?:-[a-z0-9]+)*$",
+      {
+        "message": "Function names must be kebab-case and start with a letter (e.g., get-my-value)."
+      }
+    ],
+    "scss/at-mixin-pattern": [
+      "^[a-z]+(?:-[a-z0-9]+)*$",
+      {
+        "message": "Mixin names must be kebab-case and start with a letter (e.g., apply-my-style)."
+      }
+    ],
+    "scss/percent-placeholder-pattern": [
+      "^[a-z]+(?:-[a-z0-9]+)*$",
+      {
+        "message": "Placeholder selectors must be kebab-case and start with a letter (e.g., %my-placeholder)."
+      }
+    ],
+    "selector-class-pattern": [
+      "^[a-z]+(?:-[a-z0-9]+)*$",
+      {
+        "message": "Class selectors must be kebab-case and start with a letter (e.g., .my-class-name)."
+      }
+    ],
+    "selector-id-pattern": [
+      "^[a-z]+(?:-[a-z0-9]+)*$",
+      {
+        "message": "ID selectors must be kebab-case and start with a letter (e.g., #my-id-name)."
+      }
+    ],
+    "custom-property-pattern": [
+      "^[a-z]+(?:-[a-z0-9]+)*(?:--[a-z0-9]+(?:-[a-z0-9]+)*)?$",
+      {
+        "message": "Custom properties must be kebab-case, optionally with a state suffix (e.g., --my-property or --my-property--hover)."
+      }
+    ],
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ],
+    "csstools/use-logical-spec": "always"
+  },
+  "overrides": [
+    {
+      "files": ["**/*.svelte"],
+      "customSyntax": "postcss-html"
+    }
+  ]
 }
