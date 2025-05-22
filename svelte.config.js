@@ -101,11 +101,6 @@ const config = {
 			}
 		},
 
-		// Development configuration
-		browser: {
-			open: false
-		},
-
 		// Embedded mode configuration
 		embedded: false,
 
