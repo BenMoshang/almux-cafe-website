@@ -3,5 +3,4 @@
 @use 'sass:string';
 @use 'sass:math';
 
-// Public API - Forward all public utilities
-@forward 'public' as *;
+// Public API - Forward all public utilities@forward 'public';

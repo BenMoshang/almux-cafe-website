@@ -1,5 +1,4 @@
 <script lang="ts">
-	import NewHeader from '$lib/layout/NewHeader.svelte';
 	import '$lib/styles/main.scss';
 	let { children } = $props();
 </script>
@@ -8,7 +7,7 @@
 	<title>Almux Cafe & Bakery</title>
 </svelte:head>
 <div class="layout-wrapper">
-	<NewHeader />
+	<!-- <NewHeader /> -->
 	<main class="page-container">
 		{@render children()}
 	</main>
@@ -19,6 +18,8 @@
 <!-- SVG filter for noise effect -->
 
 <style lang="scss" global>
+	@use '$lib/styles/public/public-z-index' as *;
+
 	:global(*),
 	:global(*::before),
 	:global(*::after),
