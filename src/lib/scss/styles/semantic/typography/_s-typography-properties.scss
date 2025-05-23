@@ -22,6 +22,10 @@
 @use '../../primitive/typography/_p-typography-scale' as p_type-size; // Font sizes, line heights
 @use '../../primitive/typography/_p-typography-properties' as p_type-props; // Font families, weights, etc.
 
+// Semantic Typography Definitions
+// --------------------------------------------------------------------------
+@use '_s-typography-scale' as s_typo; // Responsive font size functions
+
 /* ==========================================================================
    1. SEMANTIC TYPOGRAPHY PRESET CONFIGURATION
    ==========================================================================
@@ -165,6 +169,81 @@ $SEMANTIC_TYPOGRAPHY_PRESETS: (
    This section generates utility mixins and placeholders for each typography preset.
    These utilities can be used via @include or @extend throughout the project.
    -------------------------------------------------------------------------- */
+
+// Generate placeholder selectors for each semantic typography preset
+@each $semantic-name, $preset in $SEMANTIC_TYPOGRAPHY_PRESETS {
+	// Extract values from the preset
+	$font-size-key-mobile: map.get($preset, 'font-size-key-mobile');
+	$font-size-key-desktop: map.get($preset, 'font-size-key-desktop');
+	$font-family-key: map.get($preset, 'font-family-key');
+	$font-weight-key: map.get($preset, 'font-weight-key');
+	$letter-spacing-key: map.get($preset, 'letter-spacing-key');
+	$clamp-font-size: map.get($preset, 'clamp-font-size');
+	$text-transform: map.get($preset, 'text-transform');
+
+	// Generate placeholder selector for this semantic style
+	%text-#{$semantic-name} {
+		// Set font family
+		@if $font-family-key {
+			font-family: p_type-props.get-font-family($font-family-key);
+		}
+
+		// Set font weight
+		@if $font-weight-key {
+			font-weight: p_type-props.get-font-weight($font-weight-key);
+		}
+
+		// Set letter spacing
+		@if $letter-spacing-key {
+			letter-spacing: p_type-props.get-letter-spacing($letter-spacing-key);
+		}
+
+		// Set text transform
+		@if $text-transform {
+			text-transform: $text-transform;
+		}
+
+		// Set font size with optional fluid scaling
+		@if $clamp-font-size and $font-size-key-mobile != $font-size-key-desktop {
+			// Use fluid typography when mobile and desktop sizes differ
+			$mobile-size: p_type-size.get-font-size($font-size-key-mobile);
+			$desktop-size: p_type-size.get-desktop-font-size($font-size-key-desktop);
+			@if $mobile-size and $desktop-size {
+				font-size: u_clamp.clamp-font-size($mobile-size, $desktop-size);
+			}
+		} @else if $font-size-key-mobile {
+			// Use responsive font size from semantic scale (already handles mobile/desktop scaling)
+			// Find the corresponding semantic ID from the semantic scale mapping
+			@if $font-size-key-mobile == 25 {
+				font-size: s_typo.get-responsive-font-size(100);
+			} @else if $font-size-key-mobile == 50 {
+				font-size: s_typo.get-responsive-font-size(200);
+			} @else if $font-size-key-mobile == 100 {
+				font-size: s_typo.get-responsive-font-size(300);
+			} @else if $font-size-key-mobile == 200 {
+				font-size: s_typo.get-responsive-font-size(400);
+			} @else if $font-size-key-mobile == 300 {
+				font-size: s_typo.get-responsive-font-size(500);
+			} @else if $font-size-key-mobile == 400 {
+				font-size: s_typo.get-responsive-font-size(600);
+			} @else if $font-size-key-mobile == 500 {
+				font-size: s_typo.get-responsive-font-size(700);
+			} @else if $font-size-key-mobile == 600 {
+				font-size: s_typo.get-responsive-font-size(800);
+			} @else if $font-size-key-mobile == 700 {
+				font-size: s_typo.get-responsive-font-size(900);
+			} @else {
+				// Fallback to single font size
+				font-size: p_type-size.get-font-size($font-size-key-mobile);
+			}
+		}
+
+		// Set line height based on font size
+		@if $font-size-key-mobile {
+			line-height: p_type-size.get-line-height($font-size-key-mobile);
+		}
+	}
+}
 
 /* ==========================================================================
    3. EXPORTS

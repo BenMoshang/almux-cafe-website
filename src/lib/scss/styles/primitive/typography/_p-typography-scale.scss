@@ -26,55 +26,53 @@
 //                 0 is base, positive numbers are larger, negative are smaller.
 // ---------------------------------------------------------------------------
 $_TYPOGRAPHY_CONFIG_MOBILE: (
-  base-font-size: 0.875rem,
-  // Typically 14px
-  base-line-height-ratio: 1.45,
-  // Slightly tighter for mobile
-  scale-ratio-key: golden-ratio,
-  // Key from $_TYPE_SCALE_RATIOS
-  font-steps:
-    (
-      25: -0.75,
-      50: -0.5,
-      100: 0,
-      // Base text
-      200: 1,
-      300: 2,
-      400: 3,
-      500: 4,
-      600: 5,
-      700: 6,
-      800: 7,
-      900: 8,
-      1000: 9,
-      1100: 10,
-    ),
+	base-font-size: 0.875rem,
+	// Typically 14px
+	base-line-height-ratio: 1.45,
+	// Slightly tighter for mobile
+	scale-ratio-key: golden-ratio,
+	// Key from $_TYPE_SCALE_RATIOS
+	font-steps: (
+			25: -0.75,
+			50: -0.5,
+			100: 0,
+			// Base text
+			200: 1,
+			300: 2,
+			400: 3,
+			500: 4,
+			600: 5,
+			700: 6,
+			800: 7,
+			900: 8,
+			1000: 9,
+			1100: 10
+		)
 ) !default;
 
 $_TYPOGRAPHY_CONFIG_DESKTOP: (
-  base-font-size: 1rem,
-  // Typically 16px. Original was 1.125rem (18px), adjust as needed.
-  base-line-height-ratio: 1.5,
-  // Base line height for body text
-  scale-ratio-key: golden-ratio,
-  // Key from $_TYPE_SCALE_RATIOS
-  font-steps:
-    (
-      25: -0.75,
-      50: -0.5,
-      100: 0,
-      // Base text
-      200: 1,
-      300: 2,
-      400: 3,
-      500: 4,
-      600: 5,
-      700: 6,
-      800: 7,
-      900: 8,
-      1000: 9,
-      1100: 10,
-    ),
+	base-font-size: 1rem,
+	// Typically 16px. Original was 1.125rem (18px), adjust as needed.
+	base-line-height-ratio: 1.5,
+	// Base line height for body text
+	scale-ratio-key: golden-ratio,
+	// Key from $_TYPE_SCALE_RATIOS
+	font-steps: (
+			25: -0.75,
+			50: -0.5,
+			100: 0,
+			// Base text
+			200: 1,
+			300: 2,
+			400: 3,
+			500: 4,
+			600: 5,
+			700: 6,
+			800: 7,
+			900: 8,
+			1000: 9,
+			1100: 10
+		)
 ) !default;
 
 /* ==========================================================================
@@ -90,11 +88,11 @@ $_TYPOGRAPHY_CONFIG_DESKTOP: (
  * @return {Number} The numeric scale ratio, or 1 if key not found.
  */
 @function _get-scale-ratio($key: golden-ratio) {
-  @if not map.has-key(g-vars.$TYPE_SCALE_RATIOS, $key) {
-    @warn "Type scale ratio key '#{$key}' not found in g-vars.$TYPE_SCALE_RATIOS. Returning 1 (no scaling).";
-    @return 1;
-  }
-  @return map.get(g-vars.$TYPE_SCALE_RATIOS, $key);
+	@if not map.has-key(g-vars.$TYPE_SCALE_RATIOS, $key) {
+		@warn "Type scale ratio key '#{$key}' not found in g-vars.$TYPE_SCALE_RATIOS. Returning 1 (no scaling).";
+		@return 1;
+	}
+	@return map.get(g-vars.$TYPE_SCALE_RATIOS, $key);
 }
 
 /**
@@ -106,17 +104,17 @@ $_TYPOGRAPHY_CONFIG_DESKTOP: (
  * @return {Number} The calculated font size in rem.
  */
 @function _calculate-type-size($step, $base-size, $ratio) {
-  @if $ratio == 1 {
-    // If ratio is 1, no scaling occurs.
-    @return $base-size;
-  }
-  @if $step == 0 {
-    @return $base-size;
-  } @else if $step < 0 {
-    @return math.div($base-size, math.pow($ratio, abs($step)));
-  } @else {
-    @return math.pow($ratio, $step) * $base-size;
-  }
+	@if $ratio == 1 {
+		// If ratio is 1, no scaling occurs.
+		@return $base-size;
+	}
+	@if $step == 0 {
+		@return $base-size;
+	} @else if $step < 0 {
+		@return math.div($base-size, math.pow($ratio, abs($step)));
+	} @else {
+		@return math.pow($ratio, $step) * $base-size;
+	}
 }
 
 /**
@@ -128,25 +126,25 @@ $_TYPOGRAPHY_CONFIG_DESKTOP: (
  * @return {Number} The calculated line height in rem.
  */
 @function _calculate-optimal-line-height($current-font-size, $config) {
-  $base-font-size: map.get($config, base-font-size);
-  $base-line-height-ratio: map.get($config, base-line-height-ratio);
+	$base-font-size: map.get($config, base-font-size);
+	$base-line-height-ratio: map.get($config, base-line-height-ratio);
 
-  // Avoid division by zero or non-numeric current-font-size if something went wrong.
-  @if meta.type-of($current-font-size) != 'number' or $current-font-size == 0 {
-    @warn "Invalid current-font-size (#{$current-font-size}) for line-height calculation. Returning base line-height.";
-    @return $base-font-size * $base-line-height-ratio;
-  }
+	// Avoid division by zero or non-numeric current-font-size if something went wrong.
+	@if meta.type-of($current-font-size) != 'number' or $current-font-size == 0 {
+		@warn "Invalid current-font-size (#{$current-font-size}) for line-height calculation. Returning base line-height.";
+		@return $base-font-size * $base-line-height-ratio;
+	}
 
-  // Formula attempts to maintain similar perceived spacing as base.
-  // It adjusts the 'added space' (line-height-ratio - 1) proportionally.
-  $ratio-adjustment: math.div(($base-line-height-ratio - 1) * $base-font-size, $current-font-size);
-  $calculated-line-height-ratio: 1 + $ratio-adjustment;
+	// Formula attempts to maintain similar perceived spacing as base.
+	// It adjusts the 'added space' (line-height-ratio - 1) proportionally.
+	$ratio-adjustment: math.div(($base-line-height-ratio - 1) * $base-font-size, $current-font-size);
+	$calculated-line-height-ratio: 1 + $ratio-adjustment;
 
-  // Ensure a minimum line height (e.g., 1.2) to avoid overly tight lines for large text.
-  $final-line-height-ratio: max(1.2, $calculated-line-height-ratio);
+	// Ensure a minimum line height (e.g., 1.2) to avoid overly tight lines for large text.
+	$final-line-height-ratio: max(1.2, $calculated-line-height-ratio);
 
-  // Return line height in rem, rounded to a reasonable precision (e.g., 3 decimal places).
-  @return round(($current-font-size * $final-line-height-ratio) / 0.001rem) * 0.001rem;
+	// Return line height in rem, rounded to a reasonable precision (e.g., 3 decimal places).
+	@return round(($current-font-size * $final-line-height-ratio) / 0.001rem) * 0.001rem;
 }
 
 /* ==========================================================================
@@ -160,38 +158,38 @@ $_TYPOGRAPHY_CONFIG_DESKTOP: (
  * @return {Map} A map containing 'font-sizes' and 'line-heights' maps.
  */
 @function _generate-typography-system($config) {
-  $font-sizes-map: ();
-  $line-heights-map: ();
+	$font-sizes-map: ();
+	$line-heights-map: ();
 
-  $base-font-size: map.get($config, base-font-size);
-  $scale-ratio-key: map.get($config, scale-ratio-key);
-  $scale-ratio-value: _get-scale-ratio($scale-ratio-key);
-  $font-steps: map.get($config, font-steps);
+	$base-font-size: map.get($config, base-font-size);
+	$scale-ratio-key: map.get($config, scale-ratio-key);
+	$scale-ratio-value: _get-scale-ratio($scale-ratio-key);
+	$font-steps: map.get($config, font-steps);
 
-  @if meta.type-of($font-steps) != 'map' {
-    @warn "Font steps are not defined correctly in the configuration. Typography scale will be empty.";
-    @return (font-sizes: $font-sizes-map, line-heights: $line-heights-map);
-  }
+	@if meta.type-of($font-steps) != 'map' {
+		@warn "Font steps are not defined correctly in the configuration. Typography scale will be empty.";
+		@return (font-sizes: $font-sizes-map, line-heights: $line-heights-map);
+	}
 
-  @each $key, $step in $font-steps {
-    $font-size: _calculate-type-size($step, $base-font-size, $scale-ratio-value);
-    $font-sizes-map: map.merge(
-      $font-sizes-map,
-      (
-        $key: $font-size,
-      )
-    );
+	@each $key, $step in $font-steps {
+		$font-size: _calculate-type-size($step, $base-font-size, $scale-ratio-value);
+		$font-sizes-map: map.merge(
+			$font-sizes-map,
+			(
+				$key: $font-size
+			)
+		);
 
-    $line-height: _calculate-optimal-line-height($font-size, $config);
-    $line-heights-map: map.merge(
-      $line-heights-map,
-      (
-        $key: $line-height,
-      )
-    );
-  }
+		$line-height: _calculate-optimal-line-height($font-size, $config);
+		$line-heights-map: map.merge(
+			$line-heights-map,
+			(
+				$key: $line-height
+			)
+		);
+	}
 
-  @return (font-sizes: $font-sizes-map, line-heights: $line-heights-map);
+	@return (font-sizes: $font-sizes-map, line-heights: $line-heights-map);
 }
 
 /* ==========================================================================
@@ -209,3 +207,46 @@ $LINE_HEIGHTS_MOBILE: map.get($_mobile-typography-system, line-heights) !default
    END OF BASE TYPOGRAPHY SETUP
    Semantic and responsive font sizes are handled in a separate file.
    ========================================================================== */
+
+/* ==========================================================================
+   5. PUBLIC HELPER FUNCTIONS
+   ========================================================================== */
+
+/**
+ * Retrieves a font size value from the mobile font sizes map.
+ * @param {Number} $key - The numeric key (e.g., 100, 200, 300).
+ * @return {Number | Null} The font size in rem if found, otherwise null.
+ */
+@function get-font-size($key) {
+	@if not map.has-key($FONT_SIZES_MOBILE, $key) {
+		@warn "Font size key '#{$key}' not found in $FONT_SIZES_MOBILE.";
+		@return null;
+	}
+	@return map.get($FONT_SIZES_MOBILE, $key);
+}
+
+/**
+ * Retrieves a line height value from the mobile line heights map.
+ * @param {Number} $key - The numeric key (e.g., 100, 200, 300).
+ * @return {Number | Null} The line height in rem if found, otherwise null.
+ */
+@function get-line-height($key) {
+	@if not map.has-key($LINE_HEIGHTS_MOBILE, $key) {
+		@warn "Line height key '#{$key}' not found in $LINE_HEIGHTS_MOBILE.";
+		@return null;
+	}
+	@return map.get($LINE_HEIGHTS_MOBILE, $key);
+}
+
+/**
+ * Retrieves a desktop font size value from the desktop font sizes map.
+ * @param {Number} $key - The numeric key (e.g., 100, 200, 300).
+ * @return {Number | Null} The font size in rem if found, otherwise null.
+ */
+@function get-desktop-font-size($key) {
+	@if not map.has-key($FONT_SIZES_DESKTOP, $key) {
+		@warn "Desktop font size key '#{$key}' not found in $FONT_SIZES_DESKTOP.";
+		@return null;
+	}
+	@return map.get($FONT_SIZES_DESKTOP, $key);
+}
