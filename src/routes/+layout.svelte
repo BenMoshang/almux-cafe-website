@@ -1,5 +1,4 @@
 <script lang="ts">
-	import '$lib/styles/main.scss';
 	let { children } = $props();
 </script>
 
@@ -18,8 +17,6 @@
 <!-- SVG filter for noise effect -->
 
 <style lang="scss" global>
-	@use '$lib/styles/public/public-z-index' as *;
-
 	:global(*),
 	:global(*::before),
 	:global(*::after),

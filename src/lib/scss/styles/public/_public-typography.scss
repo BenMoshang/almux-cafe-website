@@ -1,0 +1,107 @@
+// _public-typography.scss
+// Purpose: Provides public-facing mixins to apply semantic typography styles.
+// Flow: primitive → semantic → mixtend → public
+
+@use '../semantic/typography/_s-typography-scale' as s_typo;
+@use '../semantic/typography/_s-typography-properties' as s_typo_props;
+@use '../../utils/_u-mixtend' as u_mixtend;
+@use 'sass:map';
+@use 'sass:meta';
+
+// ==========================================================================
+// PUBLIC TYPOGRAPHY API MIXINS
+// ==========================================================================
+
+// Generate additional utility classes from the semantic typography scale (numeric keys)
+@each $semantic-id, $font-size-value in s_typo.$RESPONSIVE_FONT_SIZES {
+	@if $font-size-value != null {
+		@include u_mixtend.create-mixtend('u-font-size-#{$semantic-id}') {
+			font-size: $font-size-value;
+		}
+	}
+}
+
+/**
+ * Public mixin for applying semantic typography styles.
+ * Accepts semantic names as direct parameters (no string keys required).
+ *
+ * Available semantic names:
+ * - display-a: Large display text for heroes
+ * - display-b: Secondary display text
+ * - title-a: Primary section titles
+ * - title-b: Secondary headings
+ * - title-c: Tertiary headings
+ * - heading: Standard content headings
+ * - subheading: Small headings/labels
+ * - body: Standard body text
+ * - callout: Emphasized body text
+ * - label: Form labels/buttons
+ * - caption: Small descriptive text
+ * - overline: Tiny auxiliary text
+ *
+ * @param {Keyword} $semantic-name - The semantic typography name without quotes
+ *
+ * @example
+ *   .hero-title {
+ *     @include apply-text(display-a);
+ *   }
+ *
+ *   .section-header {
+ *     @include apply-text(title-a);
+ *   }
+ *
+ *   .body-content {
+ *     @include apply-text(body);
+ *   }
+ */
+@mixin apply-text($semantic-name) {
+	$semantic-name-string: '#{$semantic-name}';
+
+	@if map.has-key(s_typo_props.$SEMANTIC_TYPOGRAPHY_PRESETS, $semantic-name-string) {
+		@extend %text-#{$semantic-name-string};
+	} @else {
+		@warn "apply-text: Semantic typography preset '#{$semantic-name-string}' not found. Available presets: #{map.keys(s_typo_props.$SEMANTIC_TYPOGRAPHY_PRESETS)}";
+	}
+}
+
+/**
+ * Alternative mixin for applying typography by numeric semantic ID.
+ *
+ * @param {Number} $semantic-id - The numeric semantic ID (100-900)
+ *
+ * @example
+ *   .small-text {
+ *     @include apply-text-scale(200);
+ *   }
+ *
+ *   .large-heading {
+ *     @include apply-text-scale(700);
+ *   }
+ */
+@mixin apply-text-scale($semantic-id) {
+	@if map.has-key(s_typo.$RESPONSIVE_FONT_SIZES, $semantic-id) {
+		@extend %text-#{$semantic-id};
+	} @else {
+		@warn "apply-text-scale: Semantic font size ID '#{$semantic-id}' not found. Available IDs: #{map.keys(s_typo.$RESPONSIVE_FONT_SIZES)}";
+	}
+}
+
+/**
+ * Mixin for applying only font-size from semantic scale.
+ *
+ * @param {Number} $semantic-id - The numeric semantic ID
+ *
+ * @example
+ *   .custom-element {
+ *     @include apply-text-size(400);
+ *     font-family: custom-font;
+ *   }
+ */
+@mixin apply-text-size($semantic-id) {
+	$font-size-value: s_typo.get-responsive-font-size($semantic-id);
+	@if $font-size-value {
+		font-size: $font-size-value;
+	} @else {
+		@warn "apply-text-size: No font size found for semantic ID '#{$semantic-id}'";
+	}
+}

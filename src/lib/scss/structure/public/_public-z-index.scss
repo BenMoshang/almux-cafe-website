@@ -3,7 +3,7 @@
 // Provides a public-facing API for applying z-index values.
 // ==========================================================================
 
-@use '../structure/semantic/_s-z-index' as s_z_index;
+@use '../semantic/s-z-index' as s_z_index;
 @use 'sass:map';
 
 // --- Helper Function ---
@@ -16,15 +16,6 @@
 
 	@return map.get(s_z_index.$SEMANTIC_Z_INDEX, $name);
 }
-
-// --- Apply Z-Index Mixin ---
-// Applies a semantic z-index value using a parameter.
-// @param {String} $name - The semantic name of the z-index level (e.g., 'base', 'heaven').
-//                         Must be a key in the $SEMANTIC_Z_INDEX map.
-// @example
-//   .my-element {
-//     @include apply-z(higher);
-//   }
 
 @mixin apply-z($name) {
 	z-index: get-z-index($name);

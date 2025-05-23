@@ -17,7 +17,17 @@ export default defineConfig(({ command, mode }): UserConfig => {
 			}
 		},
 
-		// CSS Configuration		css: {			transformer: 'lightningcss',			// Better dev experience			devSourcemap: isDev		},
+		// CSS Configuration
+		css: {
+			preprocessorOptions: {
+				scss: {
+					additionalData: `@use '$lib/scss/api.scss' as *;`
+				}
+			},
+			transformer: 'lightningcss',
+			// Better dev experience
+			devSourcemap: isDev
+		},
 
 		// Build Configuration
 		build: {
@@ -49,7 +59,7 @@ export default defineConfig(({ command, mode }): UserConfig => {
 			cors: true,
 			// Hot reload optimization
 			hmr: {
-				overlay: false
+				overlay: true
 			}
 		},
 

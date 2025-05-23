@@ -1,2 +1,1 @@
-// Reexport your entry components here
-export { default as TypographyTesting } from './TypographyTesting.svelte';
+// Reexport your entry components hereexport { default as TypographyTesting } from './TypographyTesting.svelte';export { default as SpacingTesting } from './SpacingTesting.svelte';

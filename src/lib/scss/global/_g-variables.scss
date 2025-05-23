@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 $TYPE_SCALE_RATIOS: (
 	minor-second: 1.067,
 	major-second: 1.125,
@@ -26,3 +28,6 @@ $MAX_INLINE_SIZES: (
 
 $PAGE_MIN_INLINE: 20rem;
 $PAGE_MAX_INLINE: map.get($MAX_INLINE_SIZES, lg);
+
+// Media Query Breakpoints
+$MQ__MIN-WIDTH--M: 48rem; // Medium breakpoint (tablet)

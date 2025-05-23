@@ -1,7 +1,7 @@
-@use '../structure/semantic/s-spacing-scale' as semantic_spacing_api;
+@use '../semantic/s-spacing-scale' as semantic_spacing_api;
 @use 'sass:meta';
 @use 'sass:map';
-@use '../utils/u-mixtend' as mixtend;
+@use '../../utils/u-mixtend' as mixtend;
 // ==========================================================================
 // PUBLIC SPACING API MIXINS
 // ==========================================================================
@@ -114,22 +114,21 @@
 		@if $value == null {
 			@warn "apply-padding: Resolved value for semantic key '#{$semantic-spacing-key}' is null or invalid. No padding applied.";
 		} @else {
-			// Construct the mixin name and include it.
-			// The included mixins are defined by the create-mixtend loop further down.
+			// Apply the padding directly using the resolved value
 			@if $side == null {
-				@include u-p-#{$semantic-spacing-key};
+				padding: $value;
 			} @else if $side == top {
-				@include u-pt-#{$semantic-spacing-key};
+				padding-block-start: $value;
 			} @else if $side == right {
-				@include u-pr-#{$semantic-spacing-key};
+				padding-inline-end: $value;
 			} @else if $side == bottom {
-				@include u-pb-#{$semantic-spacing-key};
+				padding-block-end: $value;
 			} @else if $side == left {
-				@include u-pl-#{$semantic-spacing-key};
+				padding-inline-start: $value;
 			} @else if $side == block {
-				@include u-py-#{$semantic-spacing-key}; // 'py' for padding y-axis (block)
+				padding-block: $value; // 'py' for padding y-axis (block)
 			} @else if $side == inline {
-				@include u-px-#{$semantic-spacing-key}; // 'px' for padding x-axis (inline)
+				padding-inline: $value; // 'px' for padding x-axis (inline)
 			} @else {
 				@warn "apply-padding: Invalid side '#{$side}'. Use top, right, bottom, left, block, inline, or null. No padding applied.";
 			}
@@ -153,19 +152,19 @@
 			@warn "apply-margin: Resolved value for semantic key '#{$semantic-spacing-key}' is null or invalid. No margin applied.";
 		} @else {
 			@if $side == null {
-				@include u-m-#{$semantic-spacing-key};
+				margin: $value;
 			} @else if $side == top {
-				@include u-mt-#{$semantic-spacing-key};
+				margin-block-start: $value;
 			} @else if $side == right {
-				@include u-mr-#{$semantic-spacing-key};
+				margin-inline-end: $value;
 			} @else if $side == bottom {
-				@include u-mb-#{$semantic-spacing-key};
+				margin-block-end: $value;
 			} @else if $side == left {
-				@include u-ml-#{$semantic-spacing-key};
+				margin-inline-start: $value;
 			} @else if $side == block {
-				@include u-my-#{$semantic-spacing-key}; // 'my' for margin y-axis (block)
+				margin-block: $value; // 'my' for margin y-axis (block)
 			} @else if $side == inline {
-				@include u-mx-#{$semantic-spacing-key}; // 'mx' for margin x-axis (inline)
+				margin-inline: $value; // 'mx' for margin x-axis (inline)
 			} @else {
 				@warn "apply-margin: Invalid side '#{$side}'. Use top, right, bottom, left, block, inline, or null. No margin applied.";
 			}
@@ -192,18 +191,23 @@
 	} @else {
 		$value: semantic_spacing_api.get-responsive-spacing($semantic-spacing-key);
 
-				@if $value == null {			@warn "apply-gap: Resolved value for semantic key '#{$semantic-spacing-key}' is null or invalid. No gap applied.";		} @else {			@if $direction == null {
-			@include u-gap-#{$semantic-spacing-key};
-		} @else if $direction == row {
-			@include u-row-gap-#{$semantic-spacing-key};
-		} @else if $direction == column {
-			@include u-col-gap-#{$semantic-spacing-key};
+		@if $value == null {
+			@warn "apply-gap: Resolved value for semantic key '#{$semantic-spacing-key}' is null or invalid. No gap applied.";
 		} @else {
-			@warn "apply-gap: Invalid direction '#{$direction}'. Use 'row', 'column', or null. Applying gap via u-gap-#{$semantic-spacing-key} as a fallback.";
-			@include u-gap-#{$semantic-spacing-key}; // Fallback to 'gap' if direction is invalid but value is good
+			@if $direction == null {
+				gap: $value;
+			} @else if $direction == row {
+				row-gap: $value;
+			} @else if $direction == column {
+				column-gap: $value;
+			} @else {
+				@warn "apply-gap: Invalid direction '#{$direction}'. Use 'row', 'column', or null. Applying gap as fallback.";
+				gap: $value; // Fallback to 'gap' if direction is invalid but value is good
+			}
 		}
 	}
 }
+
 /* ==========================================================================
    END OF PUBLIC SPACING API
    ========================================================================== */

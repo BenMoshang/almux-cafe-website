@@ -1,0 +1,65 @@
+// ==========================================================================
+// MINIMAL API - MIXINS ONLY
+// ==========================================================================
+// Purpose: Provides minimal access to essential mixins without any CSS generation.
+
+@use 'structure/public/public-z-index' as z-index-api;
+@use 'structure/public/public-spacing' as spacing-api;
+@use 'structure/public/public-grid' as grid-api;
+@use 'styles/public/public-typography' as typography-api;
+
+// ==========================================================================
+// Z-INDEX API
+// ==========================================================================
+
+// Re-export only the apply-z mixin to avoid importing dependencies
+@mixin apply-z($name) {
+	@include z-index-api.apply-z($name);
+}
+
+// ==========================================================================
+// SPACING API
+// ==========================================================================
+
+// Re-export spacing mixins without utility class generation
+@mixin apply-padding($semantic-spacing-key, $side: null) {
+	@include spacing-api.apply-padding($semantic-spacing-key, $side);
+}
+
+@mixin apply-margin($semantic-spacing-key, $side: null) {
+	@include spacing-api.apply-margin($semantic-spacing-key, $side);
+}
+
+@mixin apply-gap($semantic-spacing-key, $direction: null) {
+	@include spacing-api.apply-gap($semantic-spacing-key, $direction);
+}
+
+// ==========================================================================
+// GRID API
+// ==========================================================================
+
+// Re-export grid mixins without utility class generation
+@mixin grid-container($gutter-key: null, $row-gutter-key: null) {
+	@include grid-api.grid-container($gutter-key, $row-gutter-key);
+}
+
+@mixin col($span: null, $offset: null, $order: null, $breakpoint-key: null) {
+	@include grid-api.col($span, $offset, $order, $breakpoint-key);
+}
+
+// ==========================================================================
+// TYPOGRAPHY API
+// ==========================================================================
+
+// Re-export typography mixins without utility class generation
+@mixin apply-text($semantic-name) {
+	@include typography-api.apply-text($semantic-name);
+}
+
+@mixin apply-text-scale($semantic-id) {
+	@include typography-api.apply-text-scale($semantic-id);
+}
+
+@mixin apply-text-size($semantic-id) {
+	@include typography-api.apply-text-size($semantic-id);
+}

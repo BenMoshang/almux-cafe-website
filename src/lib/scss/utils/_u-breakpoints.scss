@@ -20,9 +20,10 @@
 // - 1024px: Common start for desktop layouts.
 // You can add more granular breakpoints here if needed (e.g., 'large-desktop-start').
 $breakpoints: (
-  mobile: 30rem,
-  tablet: 48rem,  // Min-width for tablet range
-  desktop: 64rem // Min-width for desktop range and up
+	mobile: 30rem,
+	tablet: 48rem,
+	// Min-width for tablet range
+	desktop: 64rem // Min-width for desktop range and up
 ) !default;
 
 // 2. Respond-To Mixin
@@ -85,42 +86,38 @@ $breakpoints: (
  *
  */
 @mixin respond-to($device) {
-  // Retrieve breakpoint values from the map
-  $mobile-min-width: map.get($breakpoints, mobile);
+	// Retrieve breakpoint values from the map
+	$mobile-min-width: map.get($breakpoints, mobile);
+	$tablet-min-width: map.get($breakpoints, tablet);
+	$desktop-min-width: map.get($breakpoints, desktop);
 
-  $tablet-min-width: map.get($breakpoints, tablet);
-  $desktop-min-width: map.get($breakpoints, desktop);
-
-  // Validate that breakpoints are found
-  @if not $tablet-min-width {
-    @warn "Respond-to: Breakpoint 'tablet-start' not found in $breakpoints map.";
-    @return;
-  }
-  @if not $desktop-min-width {
-    @warn "Respond-to: Breakpoint 'desktop-start' not found in $breakpoints map.";
-    @return;
-  }
-
-  // Apply media queries based on the device key
-  @if $device == mobile {
-    // Targets screens *smaller than* the tablet starting point.
-    @media (min-width: ($mobile-min-width)) {
-      @content;
-    }
-  } @else if $device == tablet {
-    // Targets screens *from* the tablet starting point *up to* (but not including) the desktop starting point.
-    @media (min-width: $tablet-min-width)  {
-      @content;
-    }
-  } @else if $device == desktop {
-    // Targets screens *from* the desktop starting point and larger.
-    @media (min-width: $desktop-min-width) {
-      @content;
-    }
-  } @else {
-    // Warn if an invalid device key is used.
-    @warn "Respond-to: Unknown device key '#{$device}'. Available keys: 'mobile', 'tablet', 'desktop'.";
-  }
+	// Validate that breakpoints are found and apply media queries
+	@if not $tablet-min-width {
+		@warn "Respond-to: Breakpoint 'tablet-start' not found in $breakpoints map.";
+	} @else if not $desktop-min-width {
+		@warn "Respond-to: Breakpoint 'desktop-start' not found in $breakpoints map.";
+	} @else {
+		// Apply media queries based on the device key
+		@if $device == mobile {
+			// Targets screens *smaller than* the tablet starting point.
+			@media (min-width: ($mobile-min-width)) {
+				@content;
+			}
+		} @else if $device == tablet {
+			// Targets screens *from* the tablet starting point *up to* (but not including) the desktop starting point.
+			@media (min-width: $tablet-min-width) {
+				@content;
+			}
+		} @else if $device == desktop {
+			// Targets screens *from* the desktop starting point and larger.
+			@media (min-width: $desktop-min-width) {
+				@content;
+			}
+		} @else {
+			// Warn if an invalid device key is used.
+			@warn "Respond-to: Unknown device key '#{$device}'. Available keys: 'mobile', 'tablet', 'desktop'.";
+		}
+	}
 }
 
 // --- END OF BREAKPOINTS UTILITY ---

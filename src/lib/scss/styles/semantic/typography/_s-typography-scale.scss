@@ -1,0 +1,149 @@
+// _s-typography-scale.scss
+// Purpose: Defines a semantic layer for responsive typography values with NUMERIC keys only.
+
+@use 'sass:map';
+@use 'sass:meta';
+
+// Import the primitive typography scale which defines $FONT_SIZES_MOBILE, $FONT_SIZES_DESKTOP.
+@use '../../primitive/typography/_p-typography-scale' as p_typo;
+
+// Import the clamp utility.
+@use '../../../utils/_u-clamp' as u-clamp; // Provides u-clamp.create-clamp()
+
+// Import global variables directly for viewport configuration
+@use '../../../global/_g-variables' as g-vars;
+
+// Import mixtend utility for generating utility classes
+@use '../../../utils/u-mixtend' as u_mixtend;
+
+/* ==========================================================================
+   SEMANTIC RESPONSIVE (CLAMPED) TYPOGRAPHY SCALE
+   ==========================================================================
+   Generates a map of responsive typography values using CSS clamp().
+   These sizes fluidly transition between mobile and desktop scales based on
+   values from _p-typography-scale.scss.
+
+   IMPORTANT: Uses NUMERIC KEYS ONLY - no strings allowed.
+--------------------------------------------------------------------------- */
+
+// 1) Semantic Typography Mappings (NUMERIC KEYS ONLY)
+// ---------------------------------------------------------------------------
+// Maps numeric semantic IDs to primitive scale keys
+// Semantic meaning: 100=smallest, 200=small, 300=base, 400=medium, etc.
+$_SEMANTIC_FONT_MAPPINGS: (
+	100: (
+		mobile: 25,
+		desktop: 25
+	),
+	// Overline/tiny text
+	200: (
+			mobile: 50,
+			desktop: 50
+		),
+	// Caption/label text
+	300: (
+			mobile: 100,
+			desktop: 100
+		),
+	// Body text (base)
+	400: (
+			mobile: 200,
+			desktop: 200
+		),
+	// Subheading/callout
+	500: (
+			mobile: 300,
+			desktop: 300
+		),
+	// Small heading
+	600: (
+			mobile: 400,
+			desktop: 400
+		),
+	// Medium heading
+	700: (
+			mobile: 500,
+			desktop: 500
+		),
+	// Large heading
+	800: (
+			mobile: 600,
+			desktop: 600
+		),
+	// Display text small
+	900: (
+			mobile: 700,
+			desktop: 700
+		) // Display text large
+) !default;
+
+// 2) Viewport Configuration for Clamp Function
+// ---------------------------------------------------------------------------
+$_CLAMP_MIN_VIEWPORT: g-vars.$PAGE_MIN_INLINE !default;
+$_CLAMP_MAX_VIEWPORT: g-vars.$PAGE_MAX_INLINE !default;
+
+// 3) Generated Responsive Font Sizes Map (NUMERIC KEYS)
+// ---------------------------------------------------------------------------
+$RESPONSIVE_FONT_SIZES: () !default;
+
+@each $semantic-id, $keys in $_SEMANTIC_FONT_MAPPINGS {
+	$mobile-scale-key: map.get($keys, mobile);
+	$desktop-scale-key: map.get($keys, desktop);
+
+	// Retrieve the actual rem values from the primitive font size maps
+	$min-font-size-val: map.get(p_typo.$FONT_SIZES_MOBILE, $mobile-scale-key);
+	$max-font-size-val: map.get(p_typo.$FONT_SIZES_DESKTOP, $desktop-scale-key);
+
+	@if $min-font-size-val == null {
+		@warn "SemanticTypography: Mobile font size for primitive key '#{$mobile-scale-key}' (semantic: #{$semantic-id}) not found in p_typo.$FONT_SIZES_MOBILE. Skipping semantic ID #{$semantic-id}.";
+	} @else if $max-font-size-val == null {
+		@warn "SemanticTypography: Desktop font size for primitive key '#{$desktop-scale-key}' (semantic: #{$semantic-id}) not found in p_typo.$FONT_SIZES_DESKTOP. Skipping semantic ID #{$semantic-id}.";
+	} @else {
+		// Generate the clamp() string using the helper function
+		$clamped-font-size-string: u-clamp.create-clamp(
+			$min-size: $min-font-size-val,
+			$max-size: $max-font-size-val,
+			$min-viewport: $_CLAMP_MIN_VIEWPORT,
+			$max-viewport: $_CLAMP_MAX_VIEWPORT
+		);
+
+		// Add to the responsive font sizes map with NUMERIC key
+		$RESPONSIVE_FONT_SIZES: map.merge(
+			$RESPONSIVE_FONT_SIZES,
+			(
+				$semantic-id: $clamped-font-size-string
+			)
+		);
+	}
+}
+
+// 4) Helper Function to Get Responsive Typography
+// ---------------------------------------------------------------------------
+/**
+ * Retrieves a responsive (clamped) font size by its numeric semantic ID.
+ *
+ * @param {Number} $semantic-id - The numeric semantic ID (e.g., 300, 600, 900).
+ * @return {String | Null} - The CSS clamp() string if found, otherwise null.
+ */
+@function get-responsive-font-size($semantic-id) {
+	@if not map.has-key($RESPONSIVE_FONT_SIZES, $semantic-id) {
+		@warn "SemanticTypography: Responsive font size for semantic ID #{$semantic-id} not found in $RESPONSIVE_FONT_SIZES.";
+		@return null;
+	}
+	@return map.get($RESPONSIVE_FONT_SIZES, $semantic-id);
+}
+
+// ==========================================================================
+// MIXTEND LAYER: TYPOGRAPHY UTILITY GENERATION
+// ==========================================================================
+
+// Generate utility classes for each semantic typography ID
+@each $semantic-id, $font-size-value in $RESPONSIVE_FONT_SIZES {
+	@if $font-size-value != null {
+		@include u_mixtend.create-mixtend('u-text-#{$semantic-id}') {
+			font-size: $font-size-value;
+		}
+	} @else {
+		@warn "TypographyMixtend: Skipping utility class generation for semantic ID #{$semantic-id} due to null font-size value.";
+	}
+}
